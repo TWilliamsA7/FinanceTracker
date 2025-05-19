@@ -13,3 +13,6 @@ def register(response):
         form = UserCreationForm()
 
     return render(response, "register/register.html", {"form":form})
+
+def logout(response):
+    return render(response, "register/logout.html", {})
