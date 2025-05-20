@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'crispy_bootstrap5',
     'main.apps.MainConfig',
     'register.apps.RegisterConfig',
+    'finance.apps.FinanceConfig',
 ]
 
 MIDDLEWARE = [
