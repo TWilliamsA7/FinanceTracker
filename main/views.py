@@ -5,6 +5,18 @@ from django.http import HttpResponse
 
 def index(response):
     if (response.user.is_authenticated):
-        return render(response, "main/index.html", {"username":response.user.username})
+
+        # Calculate the total funds acorss a user's accounts
+        accounts = response.user.account_set.all()
+        total = 0
+        for account in accounts:
+            total += account.funds
+
+        params = {
+            "username":response.user.username,
+            "total_funds":total
+        }
+
+        return render(response, "main/index.html", params)
     else:
         return redirect("/login")
