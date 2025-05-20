@@ -1,0 +1,98 @@
+{% extends "main/base.html" %}
+
+{% block title %} Create New Budget {% endblock %}
+
+{% load crispy_forms_tags %}
+
+{% block name %}{{username}}{% endblock %}
+
+{% block content %}
+
+<div class="row align-items-center">
+    <div class="col text-start">
+        <h1> Create New Budget </h1>
+    </div>
+    <div class="col text-center">
+        <h2 class="border border-primary d-inline-flex p-2 m-2" id="total">Total: $0.00</h2>
+    </div>
+</div>
+
+<hr>
+
+<form method="post" action="/finance/createbudget">
+    {% csrf_token %}
+    {{ form.name.label_tag }} {{ form.name }} 
+
+    <button type="button" class="btn btn-primary" onclick="AddSection();"> Add Section </button>
+    <button type="button" class="btn btn-danger" onclick="SubtractSection();"> Remove Section </button>
+
+
+    <div id="allocations" class="row p-4"></div>
+
+    {{ form.allocations_json }}
+
+    <button type="submit" class="btn btn-success">Add</button>
+</form>
+
+<script>
+    let count = 1;
+    let sectionsData = [];
+
+    function renderSections() {
+        const container = document.getElementById("allocations");
+        container.innerHTML = "";
+
+        for (let i = 0; i < count; i++) {
+            const section = sectionsData[i] || {name: "", amount: ""};
+
+            const card = document.createElement("div");
+            card.className = "card";
+            card.style = "width: 18rem;"
+            card.innerHTML = `
+                <div class="card-body">
+                    <label> Allocation Name: </label>
+                    <input type="text" required value="${section.name}" onchange="updateSection(${i}, 'name', this.value)">
+                    <label> Amount: </label>
+                    <input type="number" min="0" step=".01" required value="${section.amount}" onchange="updateSection(${i}, 'amount', this.value)">
+                </div>
+            `;
+            container.appendChild(card);
+        }
+
+        // Trim or expand array
+        sectionsData = sectionsData.slice(0, count);
+        while (sectionsData.length < count) {
+            sectionsData.push({name:"", amount: ""});
+        }
+
+    }
+
+    function updateSection(index, field, value) {
+        sectionsData[index][field] = value;
+        document.getElementById("id_allocations_json").value = JSON.stringify(sectionsData);
+        let total = 0;
+        for (let i = 0; i < count; i++)
+            total += Number(sectionsData[i]["amount"]);
+        document.getElementById("total").innerHTML = "Total: $" + total.toFixed(2);
+        
+    }
+
+    function AddSection() {
+        count++;
+        console.log(count);
+        renderSections();
+    }
+
+    function SubtractSection() {
+        if (count > 1) {
+            count--;
+            console.log(count);
+            renderSections();
+        }
+    }
+
+    renderSections();
+    
+</script>
+
+{% endblock %}

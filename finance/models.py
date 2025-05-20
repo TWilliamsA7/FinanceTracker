@@ -18,21 +18,29 @@ class Account(models.Model):
 class Budget(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
-    num_sections = models.IntegerField(
-        validators=[
-            MinValueValidator(1),
-            MaxValueValidator(15)
-        ]
-    )
+    allocations = models.JSONField(default=dict)
 
     def __str__(self):
-        return self.name + " Budget: " + self.num_sections + " Fields"
+        return self.name
 
-class Allocation(models.Model):
-    budget_id = models.ForeignKey(Budget, on_delete=models.CASCADE)
-    name = models.CharField(max_length=50)
-    funds = models.DecimalField(max_digits=10, decimal_places=2)
-    percentage = models.DecimalField(max_digits=4, decimal_places=2)
+# class Budget(models.Model):
+#     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+#     name = models.CharField(max_length=50)
+#     num_sections = models.IntegerField(
+#         validators=[
+#             MinValueValidator(1),
+#             MaxValueValidator(15)
+#         ]
+#     )
 
-    def __str__(self):
-        return self.name + ": " + self.percentage + " | " + self.funds
+#     def __str__(self):
+#         return self.name + " Budget: " + self.num_sections + " Fields"
+
+# class Allocation(models.Model):
+#     budget_id = models.ForeignKey(Budget, on_delete=models.CASCADE)
+#     name = models.CharField(max_length=50)
+#     funds = models.DecimalField(max_digits=10, decimal_places=2)
+#     percentage = models.DecimalField(max_digits=4, decimal_places=2)
+
+#     def __str__(self):
+#         return self.name + ": " + self.percentage + " | " + self.funds

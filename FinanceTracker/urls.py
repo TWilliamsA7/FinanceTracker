@@ -24,4 +24,5 @@ urlpatterns = [
     path("register/", rv.register, name="register"),
     path("register/", include("register.urls")),
     path("", include("django.contrib.auth.urls")),
+    path("finance/", include("finance.urls"))
 ]
