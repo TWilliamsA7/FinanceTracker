@@ -5,6 +5,6 @@ from django.http import HttpResponse
 
 def index(response):
     if (response.user.is_authenticated):
-        return render(response, "main/index.html", {})
+        return render(response, "main/index.html", {"username":response.user.username})
     else:
         return redirect("/login")
