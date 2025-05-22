@@ -1,0 +1,29 @@
+{% extends "main/base.html" %}
+
+{% block title %} View Budgets {% endblock %}
+
+{% block name %}{{user.username}}{% endblock %}
+
+{% block content %}
+<h1> Budgets </h1> <hr>
+
+<div class="row">
+    {% for name, allocations in budgets %}
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+                <h5>{{name}}</h5>
+                {% for alloc in allocations %}
+                    <div class="d-inline-flex p-2 bg-body-tertiary border border-dark border-4">
+                        <p>
+                            {% for v in alloc.values %}
+                                {{v}}
+                            {% endfor %}
+                        </p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+{% endblock %}
