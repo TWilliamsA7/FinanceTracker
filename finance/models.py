@@ -19,6 +19,7 @@ class Budget(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
     allocations = models.JSONField(default=dict)
+    total = models.DecimalField(max_digits=10, decimal_places=2)
 
     def __str__(self):
         return self.name

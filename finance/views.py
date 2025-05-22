@@ -13,7 +13,7 @@ def viewAllBudgets(response):
         budgets = response.user.budget_set.all()
         cleaned_data = {}
         for budget in budgets:
-            cleaned_data[budget.name] = literal_eval(budget.allocations)
+            cleaned_data[budget.name] = [literal_eval(budget.allocations), budget.total]
         
         cleaned_data = dict(sorted(cleaned_data.items()))
 
@@ -27,10 +27,21 @@ def createBudget(response):
         if (response.method == "POST"):
             form = BudgetForm(response.POST)
             if form.is_valid():
+
+                ntotal = 0
+                alloc = literal_eval(form.cleaned_data['allocations_json'])
+                for d in alloc:
+                    for v in d.values():
+                        try:
+                            ntotal += float(v)
+                        except:
+                            pass
+
                 Budget.objects.create(
                     name=form.cleaned_data['name'],
                     user_id=response.user,
-                    allocations=form.cleaned_data['allocations_json']
+                    allocations=form.cleaned_data['allocations_json'],
+                    total=ntotal
                 ).save()
                 return redirect("viewallbudgets")
             print("Invalid Form")
