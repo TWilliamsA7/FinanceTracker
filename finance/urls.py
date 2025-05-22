@@ -4,4 +4,5 @@ from . import views
 urlpatterns = [
     path("createbudget", views.createBudget, name="createbudget"),
     path("viewallbudgets", views.viewAllBudgets, name="viewallbudgets"),
+    path("accounts", views.viewAccounts, name="accounts")
 ]

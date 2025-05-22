@@ -7,6 +7,15 @@ from ast import literal_eval
 
 # Create your views here.
 
+def viewAccounts(response):
+    if (response.user.is_authenticated):
+
+        accounts = response.user.account_set.all()
+
+        return render(response, "finance/accounts.html", {'user':response.user, 'accounts':accounts})
+    else:
+        return redirect("/login")
+
 def viewAllBudgets(response):
     if (response.user.is_authenticated):
 
