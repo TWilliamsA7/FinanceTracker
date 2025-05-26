@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from .forms import BudgetForm, AccountForm
-from .models import Budget, Account
+from .forms import BudgetForm, AccountForm, TransactionForm
+from .models import Budget, Account, Transaction
 
 from ast import literal_eval
 
@@ -77,5 +77,33 @@ def createAccount(response):
         else:
             form = AccountForm()
             return render(response, "finance/createaccount.html", {'user':response.user, 'form':form})
+    else:
+        return redirect("/login")
+    
+#  NEED TO MAKE TRANSACTIONS UPDATE THE ACCOUNTS TABLE
+
+def viewTransactions(response):
+    if (response.user.is_authenticated):
+
+        if(response.method == "POST"): 
+            form = TransactionForm(response.POST, user=response.user)
+            if form.is_valid():
+                Transaction.objects.create(
+                    user_id = response.user,
+                    account_id = form.cleaned_data['account_id'],
+                    budget_id = form.cleaned_data['budget_id'],
+                    transaction_type = form.cleaned_data['transaction_type'],
+                    amount = form.cleaned_data['amount'],
+                    note = form.cleaned_data['note'],
+                    date = form.cleaned_data['date']
+                ).save()
+                return redirect("transactions")
+            else:
+                print("Invalid Form")
+                return redirect("/")
+        else:
+            form = TransactionForm(user=response.user)
+            transactions = response.user.transaction_set.all().order_by('-date', '-amount')
+            return render(response, "finance/transactions.html", {'user':response.user, 'transactions':transactions, 'form':form})
     else:
         return redirect("/login")
