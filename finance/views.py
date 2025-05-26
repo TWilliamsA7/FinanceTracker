@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from .forms import BudgetForm
-from .models import Budget
+from .forms import BudgetForm, AccountForm
+from .models import Budget, Account
 
 from ast import literal_eval
 
@@ -61,3 +61,21 @@ def createBudget(response):
     else:
         return redirect("/login")
 
+def createAccount(response):
+    if (response.user.is_authenticated):
+        if (response.method == "POST"):
+            form = AccountForm(response.POST)
+            if form.is_valid():
+                Account.objects.create(
+                    name=form.cleaned_data['name'],
+                    funds=form.cleaned_data['funds'],
+                    user_id=response.user
+                ).save()
+                return redirect("accounts")
+            print("Invalid Form")
+            return redirect("/")
+        else:
+            form = AccountForm()
+            return render(response, "finance/createaccount.html", {'user':response.user, 'form':form})
+    else:
+        return redirect("/login")

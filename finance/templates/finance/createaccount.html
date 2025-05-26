@@ -1,0 +1,21 @@
+{% extends "main/base.html" %}
+
+{% block title %} Create New Account {% endblock %}
+
+{% load crispy_forms_tags %}
+
+{% block name %} {{user.username}} {% endblock %}
+
+{% block content %}
+
+    <h1> Create New Account </h1> <hr>
+
+    <form method="post" action="/finance/createaccount">
+        {% csrf_token %}
+        <p>{{ form.name.label_tag }} {{ form.name }}</p>
+        <p>{{ form.funds.label_tag }} {{ form.funds }}</p>
+        
+        <button type="submit" class="btn btn-success">Create Account</button>
+    </form>
+
+{% endblock %}
