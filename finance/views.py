@@ -97,6 +97,14 @@ def viewTransactions(response):
                     note = form.cleaned_data['note'],
                     date = form.cleaned_data['date']
                 ).save()
+
+                acc = form.cleaned_data['account_id']
+                if (form.cleaned_data['transaction_type'] == 'W'):
+                    acc.funds -= form.cleaned_data['amount']
+                else:
+                    acc.funds += form.cleaned_data['amount']
+                acc.save()
+
                 return redirect("transactions")
             else:
                 print("Invalid Form")
