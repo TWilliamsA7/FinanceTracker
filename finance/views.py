@@ -59,7 +59,7 @@ def createBudget(response):
 
                     # Add extra information to New Monthly
                     for d in alloc:
-                        d["spent"] = 0
+                        d["spent"] = 0.00
                     _allocations = str(alloc)
 
                 Budget.objects.create(
@@ -112,6 +112,7 @@ def viewTransactions(response):
                     note = form.cleaned_data['note'],
                     date = form.cleaned_data['date']
                 ).save()
+
 
                 acc = form.cleaned_data['account_id']
                 if (form.cleaned_data['transaction_type'] == 'W'):

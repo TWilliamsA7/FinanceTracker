@@ -8,8 +8,66 @@
 
 {% block content %}
 
-<h1> Total Capital </h1>
-<hr>
-<h2 class="text-decoration-underline"> {{total_funds}} </h2>
+<h1> Home </h1> <hr>
+
+<div class="container">
+    <div class="row align-items-start">
+        <div class="col-6 text-center">
+            <div class="d-inline-flex p-2 bg-body-tertiary border border-dark border-4 mb-5">
+                <h2> Capital: {{total_funds}} </h2>
+            </div>
+            <table class="table">
+                <h4> Recent Transactions </h4> <hr>
+                <thead>
+                    <tr>
+                        <th scope="col">Amount</th>
+                        <th scope="col">Type</th>
+                        <th scope="col">Account</th>
+                        <th scope="col">Note</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for transaction in latestTrans %}
+                        <tr>
+                            <td>
+                                {% if transaction.transaction_type == 'W' %}
+                                    <div class="text-danger">-{{transaction.amount}}</div>
+                                {% else %}
+                                    <div class="text-success-emphasis">+{{transaction.amount}}</div>
+                                {% endif %}
+                            </td>
+                            <td>{{transaction.transaction_type}}</td>
+                            <td>{{transaction.note}}</td>
+                            <td>{{transaction.date}}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="col-5">
+
+            <table class="table">
+                <h3> Monthly Budget | {{totalBudget}} </h3>
+                <thead>
+                    <tr>
+                        <th scope="col">Section</th>
+                        <th scope="col">Budget</th>
+                        <th scope="col">Spent</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for section in monthlyBudget %}
+                        <tr>
+                            <td>{{section.name}}</td>
+                            <td>{{section.amount}}</td>
+                            <td>{{section.spent}}</td>
+                        </tr>
+                    {% endfor %}
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
 {% endblock %}
