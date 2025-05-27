@@ -113,6 +113,21 @@ def viewTransactions(response):
                     date = form.cleaned_data['date']
                 ).save()
 
+                budget = form.cleaned_data['budget_id']
+
+                if budget.monthly and form.cleaned_data['transaction_type'] == 'W':
+                    ident = form.cleaned_data['note']
+                    ident = ident[0:ident.index(":")]
+                    print("Attempting to make Change!")
+                    alloc = literal_eval(budget.allocations)
+                    for section in alloc:
+                        if section['name'] == ident:
+                            section['spent'] += float(form.cleaned_data['amount'])
+                            section['spent'] = round(section['spent'], 2)
+                    budget.allocations = str(alloc)
+                    budget.save()
+                    print("Bottom of Try Block")
+                        
 
                 acc = form.cleaned_data['account_id']
                 if (form.cleaned_data['transaction_type'] == 'W'):

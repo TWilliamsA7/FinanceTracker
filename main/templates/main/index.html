@@ -14,7 +14,7 @@
     <div class="row align-items-start">
         <div class="col-6 text-center">
             <div class="d-inline-flex p-2 bg-body-tertiary border border-dark border-4 mb-5">
-                <h2> Capital: {{total_funds}} </h2>
+                <h2> Capital: ${{total_funds}} </h2>
             </div>
             <table class="table">
                 <h4> Recent Transactions </h4> <hr>
@@ -60,7 +60,9 @@
                         <tr>
                             <td>{{section.name}}</td>
                             <td>{{section.amount}}</td>
-                            <td>{{section.spent}}</td>
+                            <td>
+                                {{ section.spent}}
+                            </td>
                         </tr>
                     {% endfor %}
                     </tr>
