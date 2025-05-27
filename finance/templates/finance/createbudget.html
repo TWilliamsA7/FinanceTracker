@@ -23,9 +23,12 @@
     {% csrf_token %}
     {{ form.name.label_tag }} {{ form.name }} 
 
+    {{form.monthly.label_tag}} {{form.monthly}}
+
     <button type="button" class="btn btn-primary" onclick="AddSection();"> Add Section </button>
     <button type="button" class="btn btn-danger" onclick="SubtractSection();"> Remove Section </button>
 
+    <p class="fs-6 fw-light"> Note: Marking A Budget As Monthly Will Delete The Current Monthly Budget*</p>
 
     <div id="allocations" class="row p-4"></div>
 

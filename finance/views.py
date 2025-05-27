@@ -19,7 +19,7 @@ def viewAccounts(response):
 def viewAllBudgets(response):
     if (response.user.is_authenticated):
 
-        budgets = response.user.budget_set.all()
+        budgets = response.user.budget_set.filter(monthly=False)
         cleaned_data = {}
         for budget in budgets:
             cleaned_data[budget.name] = [literal_eval(budget.allocations), budget.total]
@@ -46,11 +46,28 @@ def createBudget(response):
                         except:
                             pass
 
+                _allocations = form.cleaned_data['allocations_json']
+
+                # Add extra layer to allocations if the budget is montly
+                if (form.cleaned_data['monthly']):
+                    # Remove the Old Monthly Budget
+                    try:
+                        oldMonthly = response.user.budget_set.get(monthly=True)
+                        oldMonthly.delete()
+                    except:
+                        pass
+
+                    # Add extra information to New Monthly
+                    for d in alloc:
+                        d["spent"] = 0
+                    _allocations = str(alloc)
+
                 Budget.objects.create(
                     name=form.cleaned_data['name'],
                     user_id=response.user,
-                    allocations=form.cleaned_data['allocations_json'],
-                    total=ntotal
+                    allocations=_allocations,
+                    total=ntotal,
+                    monthly=form.cleaned_data['monthly']
                 ).save()
                 return redirect("viewallbudgets")
             print("Invalid Form")
@@ -80,8 +97,6 @@ def createAccount(response):
     else:
         return redirect("/login")
     
-#  NEED TO MAKE TRANSACTIONS UPDATE THE ACCOUNTS TABLE
-
 def viewTransactions(response):
     if (response.user.is_authenticated):
 
@@ -115,3 +130,4 @@ def viewTransactions(response):
             return render(response, "finance/transactions.html", {'user':response.user, 'transactions':transactions, 'form':form})
     else:
         return redirect("/login")
+    

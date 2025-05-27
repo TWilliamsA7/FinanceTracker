@@ -4,6 +4,7 @@ from .models import Account, Budget
 class BudgetForm(forms.Form):
     name = forms.CharField(label="Budget Name", max_length=50)
     allocations_json = forms.CharField(widget=forms.HiddenInput)
+    monthly = forms.BooleanField(label="Monthly?", required=False)
 
 class AccountForm(forms.Form):
     name = forms.CharField(label="Account Name", max_length=100)
