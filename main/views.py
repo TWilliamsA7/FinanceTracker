@@ -9,12 +9,21 @@ def index(response):
         # Calculate the total funds acorss a user's accounts
         accounts = response.user.account_set.all()
         monthlyBudget = response.user.budget_set.get(monthly=True)
+
         totalBudget = monthlyBudget.total
-        monthlyBudget = monthlyBudget.allocations
+        monthlyBudgetAllo = monthlyBudget.allocations
 
         latestTrans = response.user.transaction_set.all().order_by("-date")[:7]
 
-        monthlyBudget = literal_eval(monthlyBudget)
+
+        monthlyBudgetLit = literal_eval(monthlyBudgetAllo)
+
+        # A Post Request indicates a Reset Call
+        if response.method == "POST":
+            for section in monthlyBudgetLit:
+                section["spent"] = 0.0
+            monthlyBudget.allocations = str(monthlyBudgetLit)
+            monthlyBudget.save()
 
         total = 0
         for account in accounts:
@@ -23,7 +32,7 @@ def index(response):
         params = {
             "username":response.user.username,
             "total_funds":total,
-            "monthlyBudget":monthlyBudget,
+            "monthlyBudget":monthlyBudgetLit,
             "totalBudget":totalBudget,
             "latestTrans":latestTrans,
         }

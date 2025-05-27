@@ -44,7 +44,7 @@
                 </tbody>
             </table>
         </div>
-        <div class="col-5">
+        <div class="col-5 text-center">
 
             <table class="table">
                 <h3> Monthly Budget | {{totalBudget}} </h3>
@@ -68,6 +68,12 @@
                     </tr>
                 </tbody>
             </table>
+
+            <form method="Post" action="/">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-warning"> Reset Monthly Spending </button>
+            </form>
+
         </div>
     </div>
 </div>
