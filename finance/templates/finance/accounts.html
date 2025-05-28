@@ -4,6 +4,8 @@
 
 {% block name %}{{user.username}}{% endblock %}
 
+{% load crispy_forms_tags %}
+
 {% block content %}
 
     <h1>Accounts</h1><hr>
@@ -13,10 +15,15 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col justify-content-start"><h3>{{account.name}}</h3></div>
-                    <div class="col justify-content-end"><h5>{{account.funds}}</h5></div>
+                    <div class="col justify-content-end"><h3>{{account.funds}}</h3></div>
                 </div>
             </div>
         </div>
     {% endfor %}
 
+    <form method="POST" action="/finance/accounts">
+        {% csrf_token %}
+        {{form|crispy}}
+        <button type="submit" class="btn btn-danger">Delete Selected Account</button>
+    </form>
 {% endblock %}

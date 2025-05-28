@@ -10,6 +10,14 @@ class AccountForm(forms.Form):
     name = forms.CharField(label="Account Name", max_length=100)
     funds = forms.DecimalField(label="Funds", max_digits=10, decimal_places=2)
 
+class DeleteAccountForm(forms.Form):
+    account_id = forms.ModelChoiceField(label="Account", queryset=Account.objects.none())
+
+    def __init__(self, *args, user=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        if user:
+            self.fields['account_id'].queryset = Account.objects.filter(user_id=user)
+
 class TransactionForm(forms.Form):
 
     amount = forms.DecimalField(label="Amount", max_digits=10, decimal_places=2)
@@ -28,6 +36,5 @@ class TransactionForm(forms.Form):
     def __init__(self, *args, user=None, **kwargs):
         super().__init__(*args, **kwargs)
         if user:
-            print("Hello, World")
             self.fields['account_id'].queryset = Account.objects.filter(user_id=user)
             self.fields['budget_id'].queryset = Budget.objects.filter(user_id=user)

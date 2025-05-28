@@ -11,7 +11,7 @@
     {% for name, data in budgets %}
         <div class="card" style="width: 18rem;">
             <div class="card-body">
-                <h5>{{name}} {{data.1}}</h5>
+                <h5>{{name}}: {{data.1}}</h5>
                 {% for alloc in data.0 %}
                     <div class="d-inline-flex p-2 bg-body-tertiary border border-dark border-4">
                         <p>
