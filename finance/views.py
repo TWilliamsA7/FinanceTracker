@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from .forms import BudgetForm, AccountForm, TransactionForm, DeleteAccountForm
+from .forms import *
 from .models import Budget, Account, Transaction
 
 from ast import literal_eval
@@ -24,6 +24,13 @@ def viewAccounts(response):
 def viewAllBudgets(response):
     if (response.user.is_authenticated):
 
+        if response.method == "POST":
+            form = DeleteBudgetForm(response.POST, user=response.user)
+            if form.is_valid():
+                form.cleaned_data['budget_id'].delete()
+
+        form = DeleteBudgetForm(user=response.user)
+
         budgets = response.user.budget_set.filter(monthly=False)
         cleaned_data = {}
         for budget in budgets:
@@ -31,7 +38,7 @@ def viewAllBudgets(response):
         
         cleaned_data = dict(sorted(cleaned_data.items()))
 
-        return render(response, "finance/viewallbudgets.html", {'user':response.user, 'budgets':cleaned_data.items()})
+        return render(response, "finance/viewallbudgets.html", {'user':response.user, 'budgets':cleaned_data.items(), 'form':form})
     else:
         return redirect("/login")
 

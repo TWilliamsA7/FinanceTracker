@@ -1,5 +1,5 @@
 from django import forms
-from .models import Account, Budget
+from .models import Account, Budget, Transaction
 
 class BudgetForm(forms.Form):
     name = forms.CharField(label="Budget Name", max_length=50)
@@ -17,6 +17,14 @@ class DeleteAccountForm(forms.Form):
         super().__init__(*args, **kwargs)
         if user:
             self.fields['account_id'].queryset = Account.objects.filter(user_id=user)
+
+class DeleteBudgetForm(forms.Form):
+    budget_id = forms.ModelChoiceField(label="Budget", queryset=Budget.objects.none())
+
+    def __init__(self, *args, user=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        if user:
+            self.fields['budget_id'].queryset = Budget.objects.filter(user_id=user)
 
 class TransactionForm(forms.Form):
 

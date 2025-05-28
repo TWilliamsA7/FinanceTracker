@@ -4,8 +4,19 @@
 
 {% block name %}{{user.username}}{% endblock %}
 
+{% load crispy_forms_tags %}
+
 {% block content %}
 <h1> Budgets </h1> <hr>
+
+<div class="m-3">
+    <form method="POST" action="/finance/viewallbudgets">
+        {% csrf_token %}
+        {{form|crispy}}
+        <button type="submit" class="btn btn-danger">Delete Selected Budget</button>
+    </form>
+
+</div>
 
 <div class="row">
     {% for name, data in budgets %}
