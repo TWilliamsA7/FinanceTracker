@@ -127,7 +127,7 @@ def viewTransactions(response):
 
                 budget = form.cleaned_data['budget_id']
 
-                if budget.monthly and form.cleaned_data['transaction_type'] == 'W':
+                if budget != None and budget.monthly and form.cleaned_data['transaction_type'] == 'W':
                     ident = form.cleaned_data['note']
                     ident = ident[0:ident.index(":")]
                     print("Attempting to make Change!")
